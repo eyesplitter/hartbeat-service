@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: heartbeat-redis-stack-depl
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: heartbeat-redis-stack
+  template:
+    metadata:
+      labels:
+        app: heartbeat-redis-stack
+    spec:
+      containers:
+        - name: heartbeat-redis-stack
+          image: redis/redis-stack
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: heartbeat-redis-srv
+spec:
+  selector:
+    app: heartbeat-redis-stack
+  ports:
+    - name: db
+      protocol: TCP
+      port: 6379
+      targetPort: 6379

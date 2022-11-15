@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: heartbeat-depl
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: heartbeat
+  template:
+    metadata:
+      labels:
+        app: heartbeat
+    spec:
+      containers:
+        - name: heartbeat
+          image: angryeye/heartbeat
+          env:
+            - name: REDIS_URL
+              value: 'redis://heartbeat-redis-srv:6379/0'
+            - name: HEARTBEAT_EXPIRE
+              value: '60'
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: heartbeat-clusterip-srv
+spec:
+  selector:
+    app: heartbeat
+  ports:
+    - name: heartbeat
+      protocol: TCP
+      port: 3000
+      targetPort: 3000
