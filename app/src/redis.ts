@@ -88,8 +88,7 @@ export async function searchGroupsByField(field: string, value: string) {
 export async function deleteGroup(groupInstance: Group) {
   const repository = client.fetchRepository<Group>(GroupSchema)
 
-  await repository.remove(groupInstance.id)
-  return {}
+  return await repository.remove(groupInstance.entityId)
 }
 
 export async function getAllGroups() {
