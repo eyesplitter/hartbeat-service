@@ -15,7 +15,7 @@ Install dependencies and run the app
     cd ..
     skaffold dev
     
-The app url is [localhost](https://localhost)
+The app url is [localhost](http://localhost)
     
 ### Notes
 
