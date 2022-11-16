@@ -15,6 +15,8 @@ Install dependencies and run the app
     cd ..
     skaffold dev
     
+The app url is [localhost](https://localhost)
+    
 ### Notes
 
 - I decided to use Redis because it can handle expired heartbeats outside the app
