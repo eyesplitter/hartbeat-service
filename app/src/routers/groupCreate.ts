@@ -3,7 +3,6 @@ import {
   searchGroupByField,
   createGroup,
   updateGroup,
-  GroupData,
 } from '../redis'
 import { formatResponse } from '../helpers'
 import { BadRequestError } from '../errors/badRequestError'
@@ -21,15 +20,13 @@ router.post('/:group/:id', async (req: Request, res: Response, next) => {
     return res.json(formatResponse(groupInstance))
   }
 
-  const group: GroupData = {
-    id: req.params.id,
-    group: req.params.group,
-    createdAt: Date.now(),
-    updatedAt: Date.now(),
-    meta: req.body ? JSON.stringify(req.body) : '',
-  }
-
-  const newGroupInstance = await createGroup(group)
+  const newGroupInstance = await createGroup({
+      id: req.params.id,
+      group: req.params.group,
+      createdAt: Date.now(),
+      updatedAt: Date.now(),
+      meta: req.body ? JSON.stringify(req.body) : '',
+})
 
   res.json(formatResponse(newGroupInstance))
 })

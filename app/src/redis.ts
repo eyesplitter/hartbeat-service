@@ -1,7 +1,5 @@
 import { Client, Entity, EntityData, Schema } from 'redis-om'
 
-const client = new Client()
-
 export interface Group {
   id: string
   group: string
@@ -18,13 +16,6 @@ export interface GroupData extends EntityData {
   meta: string
 }
 
-async function connect(url: string) {
-  if (!client.isOpen()) {
-    await client.open(url)
-    console.log('Redis Connection established')
-  }
-}
-
 export class Group extends Entity {}
 
 export const GroupSchema = new Schema(Group, {
@@ -34,6 +25,15 @@ export const GroupSchema = new Schema(Group, {
   updatedAt: { type: 'number' },
   meta: { type: 'string' },
 })
+
+const client = new Client()
+
+async function connect(url: string) {
+  if (!client.isOpen()) {
+    await client.open(url)
+    console.log('Redis Connection established')
+  }
+}
 
 async function createRepository() {
   const repository = client.fetchRepository<Group>(GroupSchema)
@@ -49,7 +49,7 @@ export async function closeRedis() {
   await client.close()
 }
 
-export async function createGroup(groupData: GroupData) {
+export async function createGroup(groupData: GroupData): Promise<Group> {
   const repository = client.fetchRepository<Group>(GroupSchema)
 
   const groupInstance = await repository.createAndSave(groupData)
@@ -73,13 +73,13 @@ export async function updateGroup(groupInstance: Group) {
   )
 }
 
-export async function searchGroupByField(field: string, value: string) {
+export async function searchGroupByField(field: string, value: string): Promise<Group | null>  {
   const repository = client.fetchRepository<Group>(GroupSchema)
 
   return await repository.search().where(field).equals(value).return.first()
 }
 
-export async function searchGroupsByField(field: string, value: string) {
+export async function searchGroupsByField(field: string, value: string): Promise<Group[]> {
   const repository = client.fetchRepository<Group>(GroupSchema)
 
   return await repository.search().where(field).equals(value).return.all()
@@ -91,7 +91,7 @@ export async function deleteGroup(groupInstance: Group) {
   return await repository.remove(groupInstance.entityId)
 }
 
-export async function getAllGroups() {
+export async function getAllGroups(): Promise<Group[]> {
   const repository = client.fetchRepository<Group>(GroupSchema)
 
   return await repository.search().return.all()
