@@ -1,7 +1,7 @@
 # Heartbeat service
 Simple api to gather heartbeats from clients
 
-[![Build][build-shield]][build-url]
+[![Tests](https://github.com/eyesplitter/heartbeat-service/actions/workflows/tests.yml/badge.svg?branch=main)](https://github.com/eyesplitter/heartbeat-service/actions/workflows/tests.yml)
 
 ### Getting Started
 
